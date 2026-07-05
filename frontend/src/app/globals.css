@@ -1,0 +1,423 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────────────
+   DISCORD DESIGN SYSTEM — Dark Mode Only
+   Background:   #313338  (content area)
+   Sidebar:      #2B2D31  (left nav)
+   Surface:      #383A40  (elevated panels/cards)
+   Input BG:     #1E1F22  (deepest layer)
+   Primary:      #5865F2  (blurple)
+   Success:      #57F287  (green)
+   Danger:       #ED4245  (red)
+   Warning:      #FEE75C  (yellow)
+   Text Primary: #F2F3F5
+   Text Muted:   #949BA4
+   Border:       rgba(255,255,255,0.06)
+ ───────────────────────────────────────────────────── */
+
+:root {
+  /* Discord dark is the only theme */
+  --background:         220 8.9% 20%;     /* #313338 */
+  --foreground:         220 9% 95%;       /* #F2F3F5 */
+  --card:               220 8% 23%;       /* #383A40 */
+  --card-foreground:    220 9% 95%;
+  --popover:            220 8% 18%;       /* #2B2D31 */
+  --popover-foreground: 220 9% 95%;
+
+  /* Blurple primary */
+  --primary:            235 86% 65%;      /* #5865F2 */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary:          220 8% 23%;       /* #383A40 */
+  --secondary-foreground: 220 9% 95%;
+  --muted:              220 8% 18%;       /* #2B2D31 */
+  --muted-foreground:   220 5% 58%;       /* #949BA4 */
+  --accent:             235 86% 65%;
+  --accent-foreground:  0 0% 100%;
+
+  /* Semantic */
+  --destructive:        359 82% 59%;      /* #ED4245 */
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borders - very subtle like Discord */
+  --border:             220 8% 26%;       /* rgba(255,255,255,0.06) equivalent */
+  --input:              220 8% 15%;       /* #232428 deep input */
+  --ring:               235 86% 65%;
+  --radius:             0.5rem;           /* 8px — Discord's card radius */
+
+  /* Charts */
+  --chart-1: 235 86% 65%;   /* blurple */
+  --chart-2: 142 69% 64%;   /* discord green #57F287 */
+  --chart-3: 38 92% 50%;    /* amber */
+  --chart-4: 271 91% 65%;   /* violet */
+  --chart-5: 359 82% 59%;   /* discord red */
+
+  /* Sidebar — Discord's #2B2D31 */
+  --sidebar:            220 8% 18%;
+  --sidebar-foreground: 220 9% 95%;
+  --sidebar-primary:    235 86% 65%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent:     220 8% 23%;
+  --sidebar-accent-foreground: 220 9% 95%;
+  --sidebar-border:     220 8% 15%;
+  --sidebar-ring:       235 86% 65%;
+
+  /* Discord semantic colors */
+  --discord-bg:         #313338;
+  --discord-sidebar:    #2B2D31;
+  --discord-surface:    #383A40;
+  --discord-deep:       #1E1F22;
+  --discord-blurple:    #5865F2;
+  --discord-green:      #57F287;
+  --discord-red:        #ED4245;
+  --discord-yellow:     #FEE75C;
+  --discord-text:       #F2F3F5;
+  --discord-muted:      #949BA4;
+  --discord-border:     rgba(255,255,255,0.06);
+
+  /* Warning tokens */
+  --warning-500: 38 92% 50%;
+  --warning-600: 32 95% 44%;
+}
+
+/* Dark class is same as root since we're discord-dark-only */
+.dark {
+  --background:         220 8.9% 20%;
+  --foreground:         220 9% 95%;
+  --card:               220 8% 23%;
+  --card-foreground:    220 9% 95%;
+  --popover:            220 8% 18%;
+  --popover-foreground: 220 9% 95%;
+  --primary:            235 86% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary:          220 8% 23%;
+  --secondary-foreground: 220 9% 95%;
+  --muted:              220 8% 18%;
+  --muted-foreground:   220 5% 58%;
+  --accent:             235 86% 65%;
+  --accent-foreground:  0 0% 100%;
+  --destructive:        359 82% 59%;
+  --destructive-foreground: 0 0% 100%;
+  --border:             220 8% 26%;
+  --input:              220 8% 15%;
+  --ring:               235 86% 65%;
+  --radius:             0.5rem;
+  --chart-1: 235 86% 65%;
+  --chart-2: 142 69% 64%;
+  --chart-3: 38 92% 50%;
+  --chart-4: 271 91% 65%;
+  --chart-5: 359 82% 59%;
+  --sidebar:            220 8% 18%;
+  --sidebar-foreground: 220 9% 95%;
+  --sidebar-primary:    235 86% 65%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent:     220 8% 23%;
+  --sidebar-accent-foreground: 220 9% 95%;
+  --sidebar-border:     220 8% 15%;
+  --sidebar-ring:       235 86% 65%;
+  --warning-500: 38 92% 50%;
+  --warning-600: 32 95% 44%;
+}
+
+/* ─────────────────────────────────────────────────────
+   THEME MAPPING
+ ───────────────────────────────────────────────────── */
+@theme inline {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Fira Code", "JetBrains Mono", monospace;
+  --color-background:           hsl(var(--background));
+  --color-foreground:           hsl(var(--foreground));
+  --color-card:                 hsl(var(--card));
+  --color-card-foreground:      hsl(var(--card-foreground));
+  --color-popover:              hsl(var(--popover));
+  --color-popover-foreground:   hsl(var(--popover-foreground));
+  --color-primary:              hsl(var(--primary));
+  --color-primary-foreground:   hsl(var(--primary-foreground));
+  --color-secondary:            hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted:                hsl(var(--muted));
+  --color-muted-foreground:     hsl(var(--muted-foreground));
+  --color-accent:               hsl(var(--accent));
+  --color-accent-foreground:    hsl(var(--accent-foreground));
+  --color-destructive:          hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border:               hsl(var(--border));
+  --color-input:                hsl(var(--input));
+  --color-ring:                 hsl(var(--ring));
+  --color-chart-1:              hsl(var(--chart-1));
+  --color-chart-2:              hsl(var(--chart-2));
+  --color-chart-3:              hsl(var(--chart-3));
+  --color-chart-4:              hsl(var(--chart-4));
+  --color-chart-5:              hsl(var(--chart-5));
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
+  --color-sidebar:                    hsl(var(--sidebar));
+  --color-sidebar-foreground:         hsl(var(--sidebar-foreground));
+  --color-sidebar-primary:            hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent:             hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground:  hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border:             hsl(var(--sidebar-border));
+  --color-sidebar-ring:               hsl(var(--sidebar-ring));
+  --color-amber-500:  hsl(var(--warning-500));
+  --color-amber-600:  hsl(var(--warning-600));
+  --color-yellow-500: hsl(var(--warning-500));
+  --color-yellow-600: hsl(var(--warning-600));
+}
+
+/* ─────────────────────────────────────────────────────
+   BASE LAYER
+ ───────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased min-h-screen;
+    font-family: "Inter", -apple-system, sans-serif;
+    background-color: #313338;
+    background-image: none;
+  }
+
+  h1 { font-size: 32px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  h2 { font-size: 24px; font-weight: 700; line-height: 1.25; letter-spacing: -0.015em; }
+  h3 { font-size: 18px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; }
+  p  { font-size: 14px; font-weight: 400; line-height: 1.6; }
+
+  table { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+}
+
+/* ─────────────────────────────────────────────────────
+   DISCORD SIDEBAR LAYOUT
+ ───────────────────────────────────────────────────── */
+.dashboard-sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: #2B2D31;
+  border-right: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.dashboard-main {
+  flex: 1;
+  min-height: 100vh;
+  overflow: auto;
+  background: #313338;
+}
+
+/* ─────────────────────────────────────────────────────
+   DISCORD NAV ITEMS — channel-list style
+ ───────────────────────────────────────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #949BA4;
+  cursor: pointer;
+  transition: background-color 100ms ease, color 100ms ease;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  line-height: 1.2;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #DBDEE1;
+}
+.nav-item.active {
+  background: rgba(88, 101, 242, 0.15);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+.nav-item.active .nav-icon {
+  color: #5865F2;
+}
+
+/* ─────────────────────────────────────────────────────
+   DISCORD CARDS & PANELS
+ ───────────────────────────────────────────────────── */
+.discord-card {
+  background: #2B2D31;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  transition: border-color 150ms ease;
+}
+.discord-card:hover {
+  border-color: rgba(255,255,255,0.1);
+}
+
+.stat-card {
+  background: #2B2D31;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.stat-card:hover {
+  border-color: rgba(88, 101, 242, 0.3);
+  background: #383A40;
+}
+
+/* Glass panel — Discord style (very subtle) */
+.glass-panel {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+}
+.dark .glass-panel {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ─────────────────────────────────────────────────────
+   DROP ZONE
+ ───────────────────────────────────────────────────── */
+.drop-zone {
+  border: 2px dashed rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+.drop-zone:hover:not(.disabled) {
+  border-color: rgba(88, 101, 242, 0.5);
+  background: rgba(88, 101, 242, 0.04);
+}
+.drop-zone.dragging {
+  border-color: #5865F2;
+  background: rgba(88, 101, 242, 0.08);
+}
+
+/* ─────────────────────────────────────────────────────
+   STATUS BADGES
+ ───────────────────────────────────────────────────── */
+.badge-tb {
+  background: rgba(237, 66, 69, 0.15);
+  color: #ED4245;
+  border: 1px solid rgba(237, 66, 69, 0.3);
+  font-weight: 600;
+}
+.badge-normal {
+  background: rgba(87, 242, 135, 0.12);
+  color: #57F287;
+  border: 1px solid rgba(87, 242, 135, 0.25);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────
+   ANIMATIONS
+ ───────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes discordPop {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+.animate-fadein {
+  animation: fadeInUp 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.animate-pop {
+  animation: discordPop 150ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─────────────────────────────────────────────────────
+   SCROLLBAR — Discord thin dark
+ ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ─────────────────────────────────────────────────────
+   RANGE INPUT
+ ───────────────────────────────────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  height: 4px;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #5865F2;
+  transition: transform 100ms ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+/* ─────────────────────────────────────────────────────
+   UTILITIES
+ ───────────────────────────────────────────────────── */
+@layer utilities {
+  /* Discord blurple button glow */
+  .btn-blurple {
+    background: #5865F2;
+    color: #FFFFFF;
+    font-weight: 500;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    transition: background 100ms ease, box-shadow 100ms ease;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-blurple:hover {
+    background: #4752C4;
+    box-shadow: 0 0 0 4px rgba(88, 101, 242, 0.15);
+  }
+  .btn-blurple:active {
+    background: #3C45A5;
+  }
+
+  /* Discord surface elevations */
+  .surface-1 { background: #1E1F22; }   /* deepest */
+  .surface-2 { background: #2B2D31; }   /* sidebar */
+  .surface-3 { background: #313338; }   /* main bg */
+  .surface-4 { background: #383A40; }   /* cards/panels */
+
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(90deg, #383A40 25%, #43454C 50%, #383A40 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+  }
+
+  .glass-panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+  }
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}

@@ -1,0 +1,44 @@
+# Dependencies & Environments
+node_modules/
+tb_env/
+venv/
+.env
+.env.*
+.venv/
+env/
+ENV/
+
+# Python Caches & Build Files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.tox/
+
+# Next.js Build Outputs & Cache
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Vercel Cache
+.vercel/
+
+# Heavy Data / Models
+backend/patients.db
+backend/patients.db-journal
+results/teacher_resnet50.keras
+results/__results___files/
+results/tb_student_densenet121.keras
+backend/dist/
+backend/build/
+desktop_build/
+results.zip
