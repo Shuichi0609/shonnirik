@@ -1,0 +1,59 @@
+import os
+import logging
+from flask import Flask, jsonify
+from flask_cors import CORS
+from flask_socketio import SocketIO
+from api_v1 import api_v1
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def create_app():
+    app = Flask(__name__)
+
+    # Configuration
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    app.config['CORS_HEADERS'] = 'Content-Type'
+
+    # Enable CORS for all routes
+    CORS(app, resources={r"/*": {"origins": "*"}})
+
+    # Register blueprints
+    app.register_blueprint(api_v1, url_prefix='/api/v1')
+
+    # Root endpoint
+    @app.route('/')
+    def index():
+        return jsonify({
+            "status": "active",
+            "message": "PulmonaryAI API Gateway"
+        })
+
+    # Health endpoint
+    @app.route('/health')
+    def health():
+        # Try to check if model is loaded
+        try:
+            from core.inference import get_model
+            model = get_model()
+            model_loaded = model is not None
+        except Exception as e:
+            logger.warning(f"Could not load model for health check: {e}")
+            model_loaded = False
+
+        return jsonify({
+            "status": "active",
+            "model_loaded": model_loaded
+        })
+
+    return app
+
+# Create the app instance for gunicorn
+app = create_app()
+
+# Initialize SocketIO
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="gevent", logger=True, engineio_logger=True)
+
+# Expose the app and socketio for imports
+__all__ = ['app', 'socketio']
