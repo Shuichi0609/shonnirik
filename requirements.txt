@@ -17,3 +17,10 @@ pydicom==2.4.5
 # Scientific Computing
 numpy==1.26.4
 scikit-learn==1.7.2
+
+# Gunicorn & async workers
+gunicorn>=22.0.0
+opencv-python-headless
+keras
+flask-socketio
+eventlet
