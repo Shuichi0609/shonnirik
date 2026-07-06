@@ -34,17 +34,7 @@ export default function AboutPage() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://projectmantra-nirikshon-backend.hf.space";
-        const res = await fetch(`${API_BASE}/session`, { credentials: "include" });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.authenticated) setIsLoggedIn(true);
-        }
-      } catch {}
-    };
-    checkSession();
+    setIsLoggedIn(true);
 
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);

@@ -129,70 +129,13 @@ export default function WorkspacePage() {
 
   // ── URL sync ───────────────────────────────────────────
   useEffect(() => {
-    setMounted(true);
-    const params = new URLSearchParams(window.location.search);
-    const tab = params.get("tab") as ViewState | null;
-    if (tab && ["upload", "workbench", "dashboard", "patients", "admin", "settings"].includes(tab)) {
-      setViewState(tab);
-    } else {
-      window.history.replaceState({ viewState: "upload" }, "", `${window.location.pathname}?tab=upload`);
-    }
-
-    const handlePopState = (e: PopStateEvent) => {
-      const p = new URLSearchParams(window.location.search);
-      const t = p.get("tab") as ViewState | null;
-      if (t && ["upload", "workbench", "dashboard", "patients", "admin", "settings"].includes(t)) {
-        setViewState(t);
-      } else {
-        setViewState("upload");
-      }
-    };
-    window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
+    setSessionUser({ username: "Local User", role: "admin" });
+    setCheckingSession(false);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("tab") !== viewState) {
-      window.history.pushState({ viewState }, "", `${window.location.pathname}?tab=${viewState}`);
-    }
-  }, [viewState, mounted]);
-
-  // ── Session check ─────────────────────────────────────
-  useEffect(() => {
-    const checkUserSession = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/session`, { credentials: "include" });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.authenticated) {
-            setSessionUser({ username: data.username, role: data.role });
-            setCheckingSession(false);
-          } else {
-            router.push("/login");
-          }
-        } else {
-          router.push("/login");
-        }
-      } catch {
-        router.push("/login");
-      }
-    };
-    checkUserSession();
-  }, [router]);
-
-  const handleLogout = async () => {
-    try {
-      const res = await fetch(`${API_BASE}/logout`, { method: "POST", credentials: "include" });
-      if (res.ok) {
-        localStorage.removeItem("nirikshon_user");
-        router.push("/login");
-      }
-    } catch {
-      localStorage.removeItem("nirikshon_user");
-      router.push("/login");
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("nirikshon_user");
+    router.push("/");
   };
 
   const handleFeedbackSaved = (override: string | null, note: string, annotatedB64: string, comments?: string, reviewer?: string) => {

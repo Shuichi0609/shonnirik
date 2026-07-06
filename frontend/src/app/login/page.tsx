@@ -19,39 +19,8 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !password) {
-      setError("Please fill in all fields.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch(`${API_BASE}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: "include"
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        localStorage.setItem("nirikshon_user", JSON.stringify({ username: data.username, role: data.role }));
-        // Redirect to Workbench
-        router.push("/diagnose");
-      } else {
-        setError(data.error || "Invalid username or password.");
-      }
-    } catch (err) {
-      console.error("Login failed:", err);
-      setError("Failed to connect to authentication server. Ensure Flask API is running.");
-    } finally {
-      setLoading(false);
-    }
+    localStorage.setItem("nirikshon_user", JSON.stringify({ username: username || "Local User", role: "admin" }));
+    router.push("/diagnose");
   };
 
   return (
