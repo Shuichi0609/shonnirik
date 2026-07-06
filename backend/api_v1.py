@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from functools import wraps
 from contextlib import closing
-from backend.utils.patient_db import (
+from utils.patient_db import (
     get_connection,
     get_dashboard_stats,
     list_studies,

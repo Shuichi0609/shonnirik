@@ -4,8 +4,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
-from backend.api_v1 import api_v1
-from backend.core.inference import get_model, OPTIMAL_THRESHOLD
+from api_v1 import api_v1
+from core.inference import get_model, OPTIMAL_THRESHOLD
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
