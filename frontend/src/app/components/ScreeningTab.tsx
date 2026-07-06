@@ -305,7 +305,7 @@ export function ScreeningTab({
       fd.append("file", blob, "compare.png");
       fd.append("prior_image_b64", priorRecord.original_b64);
       
-      const res = await fetch(`${API}/predict`, {
+      const res = await fetch(`${API}/api/v1/predict`, {
         method: "POST",
         body: fd,
         credentials: "include"
@@ -365,7 +365,7 @@ export function ScreeningTab({
   useEffect(() => {
     const fetchModelMetadata = async () => {
       try {
-        const response = await fetch(`${API_BASE}/model/metadata`, {
+        const response = await fetch(`${API_BASE}/health`, {
           credentials: "include"
         });
         if (response.ok) {

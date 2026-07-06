@@ -37,7 +37,7 @@ export const exportService = {
     };
     try {
       const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://projectmantra-nirikshon-backend.hf.space";
-      const res = await fetch(`${API_BASE}/model/metadata`, { credentials: "include" });
+      const res = await fetch(`${API_BASE}/health`, { credentials: "include" });
       if (res.ok) {
         const data = await res.json();
         if (data && data.metrics) {

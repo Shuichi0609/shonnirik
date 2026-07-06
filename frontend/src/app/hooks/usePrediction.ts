@@ -42,7 +42,7 @@ export function usePrediction(
       fd.append("file", file);
 
       try {
-        const res = await fetch(`${API}/predict`, {
+        const res = await fetch(`${API}/api/v1/predict`, {
           method: "POST",
           body: fd,
           credentials: "include" // Send cookies for CSRF double-submit validation
