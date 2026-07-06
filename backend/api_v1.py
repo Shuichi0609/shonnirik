@@ -1,7 +1,11 @@
 from flask import Blueprint, request, jsonify
 from functools import wraps
 from contextlib import closing
-from utils.patient_db import get_connection, get_dashboard_stats, list_studies
+from backend.utils.patient_db import (
+    get_connection,
+    get_dashboard_stats,
+    list_studies,
+)
 import logging
 
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
