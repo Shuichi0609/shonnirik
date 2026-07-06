@@ -969,10 +969,25 @@ def predict_image(img: Image.Image, prior_image_b64: str = None):
     
     # Check prediction
     with torch.no_grad():
-        logit = model(tensor)
-        if logit.dim() > 1:
-            logit = logit.squeeze(1)
-        prob = torch.sigmoid(logit).item() if logit.dim() == 0 else torch.sigmoid(logit)[0].item()
+        output = model(tensor)
+
+    # Two-class classifier (Normal, TB)
+    if output.ndim == 2 and output.shape[1] == 2:
+        probs = torch.softmax(output, dim=1)
+        prob = probs[0, 1].item()
+
+    # Single-output sigmoid classifier
+    elif output.numel() == 1:
+        prob = torch.sigmoid(output).item()
+
+    # Fallback
+    else:
+        output = output.reshape(-1)
+        if output.numel() == 2:
+            probs = torch.softmax(output, dim=0)
+            prob = probs[1].item()
+        else:
+            prob = torch.sigmoid(output[0]).item()
         
     is_tb = prob >= OPTIMAL_THRESHOLD
     
