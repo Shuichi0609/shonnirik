@@ -1,41 +1,42 @@
 from flask import Blueprint, request, jsonify
-from functools import wraps
-from contextlib import closing
+from PIL import Image
+import logging
+
 from utils.patient_db import (
-    get_connection,
     get_dashboard_stats,
     list_studies,
 )
-import logging
 
-api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
+from core.inference import predict_image
+
+api_v1 = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 logger = logging.getLogger("api_v1")
 
-def require_api_key(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        api_key = request.headers.get("X-API-Key")
-        if not api_key:
-            return jsonify({"error": "Missing X-API-Key header"}), 401
-        
-        with closing(get_connection()) as conn:
-            cursor = conn.execute("SELECT * FROM api_keys WHERE key_hash = ?", (api_key,))
-            key_record = cursor.fetchone()
-            if not key_record:
-                return jsonify({"error": "Invalid API Key"}), 401
-        return f(*args, **kwargs)
-    return decorated_function
 
-@api_v1.route('/predict', methods=['POST'])
-@require_api_key
+@api_v1.route("/predict", methods=["POST"])
 def api_predict():
-    """Headless prediction API for third-party integrations."""
-    return jsonify({"error": "Not implemented - See multipart upload flow"}), 501
+    try:
+        if "file" not in request.files:
+            return jsonify({"error": "No image uploaded"}), 400
 
-@api_v1.route('/studies', methods=['GET'])
-@require_api_key
+        file = request.files["file"]
+
+        if file.filename == "":
+            return jsonify({"error": "No file selected"}), 400
+
+        img = Image.open(file.stream).convert("RGB")
+
+        result, _ = predict_image(img)
+
+        return jsonify(result)
+
+    except Exception as e:
+        logger.exception("Prediction failed")
+        return jsonify({"error": str(e)}), 500
+
+
+@api_v1.route("/studies", methods=["GET"])
 def api_studies():
-    """Retrieve all studies."""
     try:
         studies = list_studies()
         return jsonify({"data": studies})
@@ -43,10 +44,9 @@ def api_studies():
         logger.error(f"API /studies error: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
-@api_v1.route('/analytics', methods=['GET'])
-@require_api_key
+
+@api_v1.route("/analytics", methods=["GET"])
 def api_analytics():
-    """Retrieve system analytics and metrics."""
     try:
         stats = get_dashboard_stats()
         return jsonify({"data": stats})
